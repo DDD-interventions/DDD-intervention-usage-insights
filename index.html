@@ -60,8 +60,8 @@
 <div style="font-size:12px;font-weight:700;color:var(--nvy);margin-bottom:12px">District status</div>
 <table style="font-size:11px;color:var(--nvy);border-collapse:collapse;width:100%">
 <tr style="vertical-align:top"><td style="padding:0 10px 10px 0;white-space:nowrap"><span class="sig so"><span class="sd"></span>On track</span></td><td style="padding:0 0 10px 0;line-height:1.5">School-level accounts &ge;50% active, underperforming schools reached &ge;50%, and non-school level &ge;50% active</td></tr>
-<tr style="vertical-align:top"><td style="padding:0 10px 10px 0;white-space:nowrap"><span class="sig sa"><span class="sd"></span>Needs attention</span></td><td style="padding:0 0 10px 0;line-height:1.5">School-level accounts &ge;25% active or underperforming schools reached &ge;25%, but does not meet all three On track thresholds</td></tr>
-<tr style="vertical-align:top"><td style="padding:0 10px 0  0;white-space:nowrap"><span class="sig su"><span class="sd"></span>Urgent</span></td><td style="padding:0;line-height:1.5">School-level accounts &lt;25% active and underperforming schools reached &lt;25%</td></tr>
+<tr style="vertical-align:top"><td style="padding:0 10px 10px 0;white-space:nowrap"><span class="sig sa"><span class="sd"></span>Usage support required</span></td><td style="padding:0 0 10px 0;line-height:1.5">School-level accounts &ge;25% active or underperforming schools reached &ge;25%, but does not meet all three On track thresholds</td></tr>
+<tr style="vertical-align:top"><td style="padding:0 10px 0  0;white-space:nowrap"><span class="sig su"><span class="sd"></span>Low usage, targeted support required</span></td><td style="padding:0;line-height:1.5">School-level accounts &lt;25% active and underperforming schools reached &lt;25%</td></tr>
 </table>
 </div>
 <div style="background:var(--srf);border:1px solid var(--brd);border-radius:10px;padding:16px">
@@ -89,7 +89,7 @@
 <select id="pf" onchange="updateFilters();R()"><option value="">All provinces</option></select>
 <select id="df" onchange="updateFilters();R()"><option value="">All districts</option></select>
 <select id="cf" onchange="R()"><option value="">All circuits</option></select>
-<select id="sf" onchange="R()"><option value="">All statuses</option><option value="urgent">Urgent</option><option value="needs-attention">Needs attention</option><option value="on-track">On track</option></select>
+<select id="sf" onchange="R()"><option value="">All statuses</option><option value="urgent">Low usage, targeted support required</option><option value="needs-attention">Usage support required</option><option value="on-track">On track</option></select>
 </div></div>
 <div id="ct"></div>
 </div>
@@ -133,13 +133,13 @@ function exec(){
     ec('Non-school users',F(na)+' <span style="font-size:13px;font-weight:400;color:var(--gry)">/ '+F(nr)+'</span>',P(na,nr)+'% active | '+F(nrp)+' repeat')+
     ec('UP primary schools','<span style="color:var(--red)">'+F(upP)+'</span>',upPA+' reached ('+P(upPA,upP)+'%)')+
     ec('UP secondary schools','<span style="color:var(--red)">'+F(upS)+'</span>',upSA+' reached ('+P(upSA,upS)+'%)')+
-    ec('District status','<span style="color:var(--grn)">'+ok+'</span> / <span style="color:var(--org)">'+att+'</span> / <span style="color:var(--red)">'+urg+'</span>','on-track / attention / urgent');
+    ec('District status','<span style="color:var(--grn)">'+ok+'</span> / <span style="color:var(--org)">'+att+'</span> / <span style="color:var(--red)">'+urg+'</span>','on-track / support required / low usage');
   document.getElementById('ins').innerHTML=
     '<div class="ib ig"><b>Underperforming schools not reached:</b> '+F(upP-upPA)+' of '+F(upP)+' underperforming primary and '+F(upS-upSA)+' of '+F(upS)+' underperforming secondary schools have zero active DDD users. Nationally, only '+P(sra,ts)+'% of schools in intervention districts have any active users, compared to '+P(na,nr)+'% of non-school level users (district officials, circuit managers).</div>'+
     '<div class="ib iw"><b>Highest usage:</b> Mopani East has the highest school-level reach at 81% of schools with active users, 80% non-school level activity, and 88% of its underperforming schools reached. OR Tambo Inland has 46% of schools reached with 79% non-school level activity. Alfred Nzo East has 38% of schools reached with 61% non-school level activity.</div>';
 }
 function ec(l,v,s){return '<div class="ec"><div class="ecl">'+l+'</div><div class="ecv">'+v+'</div>'+(s?'<div class="ecs">'+s+'</div>':'')+'</div>'}
-function sigH(s){var c={urgent:'su','needs-attention':'sa','on-track':'so'}[s],l={urgent:'Urgent','needs-attention':'Needs attention','on-track':'On track'}[s];var tips={urgent:'School-level accounts below 25% active AND underperforming schools reached below 25%','needs-attention':'At least one metric above 25% but does not meet all three On track thresholds (50% school accounts active, 50% UP reached, 50% non-school active)','on-track':'School-level accounts 50%+ active, underperforming schools 50%+ reached, and non-school level 50%+ active'};return '<span class="sig '+c+' tip" data-tip="'+tips[s]+'"><span class="sd"></span>'+l+'</span>'}
+function sigH(s){var c={urgent:'su','needs-attention':'sa','on-track':'so'}[s],l={urgent:'Low usage, targeted support required','needs-attention':'Usage support required','on-track':'On track'}[s];var tips={urgent:'School-level accounts below 25% active AND underperforming schools reached below 25%. Targeted support is needed to increase platform adoption.','needs-attention':'At least one metric above 25% but does not meet all three On track thresholds (50% school accounts active, 50% UP reached, 50% non-school active). Additional support may help increase usage.','on-track':'School-level accounts 50%+ active, underperforming schools 50%+ reached, and non-school level 50%+ active'};return '<span class="sig '+c+' tip" data-tip="'+tips[s]+'"><span class="sd"></span>'+l+'</span>'}
 function bar(v,t,c){var p=t>0?Math.round(v/t*100):0;return '<div class="ur"><div class="ub"><div class="ufill" style="width:'+p+'%;background:'+c+'"></div></div><div class="uv">'+v+' / '+t+' ('+p+'%)</div></div>'}
 function pill(t){if(!t)return '<span style="color:var(--gry)">\u2014</span>';var c={Critical:'pc',Severe:'ps',Moderate:'pm',OK:'po'}[t]||'po';return '<span class="pill '+c+'">'+t+'</span>'}
 function mb(v,mx,c){var w=mx>0?Math.max(Math.round(v/mx*40),2):0;return '<span class="mb" style="width:'+w+'px;background:'+c+'"></span> '+v}
